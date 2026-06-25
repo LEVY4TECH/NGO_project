@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HopeForward — Navbar</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b1120;
+      color: #f0ede8;
+      min-height: 200vh; /* lets you scroll to see sticky behaviour */
+    }
+
+    /* ── Navbar shell ── */
+    .hf-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0 2.5rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+      background: transparent;
+    }
+
+    /* Scrolled state (added via JS) */
+    .hf-navbar.scrolled {
+      background: rgba(11, 17, 32, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 8px 32px rgba(0,0,0,0.35);
+    }
+
+    /* thin top accent line */
+    .hf-navbar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4a85a 30%, #e8c97a 50%, #d4a85a 70%, transparent);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .hf-navbar.scrolled::before { opacity: 1; }
+
+    /* ── Brand ── */
+    .hf-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .hf-brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #d4a85a, #e8c97a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: #0b1120;
+      flex-shrink: 0;
+    }
+
+    .hf-brand-text {
+      line-height: 1;
+    }
+
+    .hf-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #f0ede8;
+      letter-spacing: 0.01em;
+    }
+
+    .hf-brand-tagline {
+      font-size: 0.62rem;
+      font-weight: 400;
+      color: #d4a85a;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ── Centre nav links ── */
+    .hf-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .hf-nav a {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.83rem;
+      font-weight: 500;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+      color: rgba(240, 237, 232, 0.78);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+
+    .hf-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 60%;
+      height: 1.5px;
+      background: #d4a85a;
+      border-radius: 2px;
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hf-nav a:hover {
+      color: #f0ede8;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .hf-nav a:hover::after { transform: translateX(-50%) scaleX(1); }
+
+    /* Donate CTA */
+    .hf-nav .nav-donate a {
+      color: #0b1120;
+      background: linear-gradient(135deg, #d4a85a, #e8c97a);
+      font-weight: 600;
+      padding: 0.45rem 1.15rem;
+      border-radius: 100px;
+      letter-spacing: 0.07em;
+      transition: filter 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 12px rgba(212,168,90,0.35);
+    }
+
+    .hf-nav .nav-donate a::after { display: none; }
+
+    .hf-nav .nav-donate a:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(212,168,90,0.5);
+      background: linear-gradient(135deg, #d4a85a, #e8c97a);
+      color: #0b1120;
+    }
+
+    /* ── Social icons ── */
+    .hf-social {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .hf-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: rgba(240, 237, 232, 0.6);
+      font-size: 0.88rem;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease, transform 0.2s ease;
+    }
+
+    .hf-social a:hover {
+      color: #d4a85a;
+      border-color: rgba(212,168,90,0.45);
+      background: rgba(212,168,90,0.08);
+      transform: translateY(-2px);
+    }
+
+    /* Divider between social and nav */
+    .hf-divider {
+      width: 1px;
+      height: 22px;
+      background: rgba(255,255,255,0.12);
+      margin: 0 0.75rem;
+    }
+
+    /* ── Mobile hamburger ── */
+    .hf-toggler {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hf-toggler span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #f0ede8;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* ── Mobile drawer ── */
+    .hf-drawer {
+      display: none;
+      position: fixed;
+      top: 72px;
+      left: 0;
+      width: 100%;
+      background: rgba(11, 17, 32, 0.97);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem 2rem 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      z-index: 999;
+    }
+
+    .hf-drawer.open { display: flex; }
+
+    .hf-drawer a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: rgba(240, 237, 232, 0.8);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s ease;
+    }
+
+    .hf-drawer a:hover { color: #d4a85a; }
+
+    .hf-drawer .drawer-donate {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.5rem;
+      border-radius: 100px;
+      background: linear-gradient(135deg, #d4a85a, #e8c97a);
+      color: #0b1120 !important;
+      font-weight: 600;
+      border: none;
+    }
+
+    .hf-drawer-social {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .hf-drawer-social a {
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: rgba(240, 237, 232, 0.5);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hf-nav, .hf-divider { display: none; }
+      .hf-toggler { display: flex; }
+    }
+
+    /* ── Hero placeholder so you can see the navbar in context ── */
+    .hero {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 60% 40%, rgba(212,168,90,0.12) 0%, transparent 60%),
+                  linear-gradient(160deg, #0b1120 60%, #111b2e);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      color: #f0ede8;
+      max-width: 760px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: #d4a85a;
+    }
+
+    .hero p {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: rgba(240,237,232,0.62);
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════ NAVBAR ══════════════ -->
+  <nav class="hf-navbar" id="mainNav">
+
+    <!-- Brand -->
+    <a href="#" class="hf-brand">
+      <div class="hf-brand-icon">
+        <i class="fa-solid fa-heart-pulse"></i>
+      </div>
+      <div class="hf-brand-text">
+        <span class="hf-brand-name">HopeForward</span>
+        <span class="hf-brand-tagline">Charity Foundation</span>
+      </div>
+    </a>
+
+    <!-- Centre links -->
+    <ul class="hf-nav">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Campaigns</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Blog</a></li>
+      <li class="nav-donate"><a href="#">Donate</a></li>
+    </ul>
+
+    <!-- Right: socials + mobile toggle -->
+    <div style="display:flex; align-items:center; gap:0.25rem;">
+      <div class="hf-social">
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button class="hf-toggler" id="toggler" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="hf-drawer" id="drawer">
+    <a href="#">Home</a>
+    <a href="#">Campaigns</a>
+    <a href="#">Events</a>
+    <a href="#">Blog</a>
+    <a href="#" class="drawer-donate">Donate Now</a>
+    <div class="hf-drawer-social">
+      <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    </div>
+  </div>
+
+  <!-- Hero placeholder -->
+  <section class="hero">
+    <h1>Making the world <em>better</em>,<br>one life at a time.</h1>
+    <p>Scroll down to see the navbar lock in — transparent at the top, frosted when you move.</p>
+  </section>
+
+  <!-- Bootstrap 5 JS bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Sticky scroll behaviour
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile drawer toggle
+    const toggler = document.getElementById('toggler');
+    const drawer  = document.getElementById('drawer');
+    toggler.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+    });
+  </script>
+
+</body>
+</html>
