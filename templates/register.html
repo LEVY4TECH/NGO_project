@@ -62,25 +62,35 @@
     <div class="auth-card">
         <!-- Brand -->
         <div class="text-center mb-3">
-            <a href="index.html" class="auth-logo d-inline-block">
+            <a href="{{ url_for('home') }}" class="auth-logo d-inline-block">
                 <i class="fa-solid fa-heart-pulse me-2"></i>HopeForward
             </a>
         </div>
         <h2 class="text-center">Create an Account</h2>
         <p class="auth-sub text-center">Join our community and help make a difference.</p>
 
-        <!-- Alert area -->
-        <div id="registerAlert" class="mb-3"></div>
+        <!-- Flash Messages configuration -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-hf alert-hf-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
 
         <!-- Register Form -->
-        <form id="registerForm" novalidate>
+        <form action="{{ url_for('register') }}" method="POST">
 
             <!-- Full Name -->
             <div class="mb-3">
                 <label class="form-label" for="regName">Full Name</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                    <input type="text" class="form-control" id="regName" placeholder="Jane Doe" required />
+                    <input type="text" class="form-control" name="name" id="regName" placeholder="Jane Doe" required />
                 </div>
             </div>
 
@@ -89,7 +99,8 @@
                 <label class="form-label" for="regEmail">Email Address</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                    <input type="email" class="form-control" id="regEmail" placeholder="jane@email.com" required />
+                    <input type="email" class="form-control" name="email" id="regEmail" placeholder="jane@email.com"
+                        required />
                 </div>
             </div>
 
@@ -98,8 +109,8 @@
                 <label class="form-label" for="regPassword">Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" class="form-control" id="regPassword" placeholder="At least 6 characters"
-                        required />
+                    <input type="password" class="form-control" name="password" minlength="6" id="regPassword"
+                        placeholder="At least 6 characters" required />
                     <button type="button" class="btn btn-outline-secondary border-0" id="togglePw"
                         style="background:var(--navy-light);border:1px solid rgba(201,168,76,.2)!important;color:var(--text-muted);">
                         <i class="fa-solid fa-eye" id="eyeIcon"></i>
@@ -112,8 +123,8 @@
                 <label class="form-label" for="regConfirm">Confirm Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-lock-open"></i></span>
-                    <input type="password" class="form-control" id="regConfirm" placeholder="Repeat your password"
-                        required />
+                    <input type="password" class="form-control" name="cpassword" id="regConfirm"
+                        placeholder="Repeat your password" required />
                 </div>
             </div>
 
@@ -124,13 +135,13 @@
 
         <hr class="divider-gold mt-4" />
         <p class="text-center mb-0" style="font-size:.9rem;">
-            Already have an account? <a href="login.html" class="text-gold fw-semibold">Sign In</a>
+            Already have an account? <a href="{{ url_for('login') }}" class="text-gold fw-semibold">Sign In</a>
         </p>
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/storage.js"></script>
+
     <script>
         /* Toggle password visibility */
         document.getElementById('togglePw').addEventListener('click', () => {
@@ -145,59 +156,7 @@
             }
         });
 
-        /* Register form submission */
-        document.getElementById('registerForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const alertEl = document.getElementById('registerAlert');
-            alertEl.innerHTML = '';
 
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim().toLowerCase();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-
-            /* Validations */
-            if (!name || !email || !password || !confirm) {
-                return showAlert('Please fill in all fields.', 'danger');
-            }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                return showAlert('Please enter a valid email address.', 'danger');
-            }
-            if (password.length < 6) {
-                return showAlert('Password must be at least 6 characters.', 'danger');
-            }
-            if (password !== confirm) {
-                return showAlert('Passwords do not match.', 'danger');
-            }
-            if (HF.getUserByEmail(email)) {
-                return showAlert('An account with that email already exists.', 'danger');
-            }
-
-            /* Determine role: first registered user = admin; rest = user */
-            const users = HF.getUsers();
-            const role = users.length === 0 ? 'admin' : 'user';
-
-            HF.addUser({
-                name,
-                email,
-                passwordHash: HF.hashPassword(password),
-                role,
-                joinedAt: new Date().toISOString()
-            });
-
-            showAlert(
-                `<i class="fa-solid fa-circle-check me-2"></i>Account created successfully! Redirecting to login…`,
-                'success'
-            );
-
-            /* Redirect to login after 1.6s */
-            setTimeout(() => { window.location.href = 'login.html'; }, 1700);
-        });
-
-        function showAlert(msg, type) {
-            const alertEl = document.getElementById('registerAlert');
-            alertEl.innerHTML = `<div class="alert-hf alert-hf-${type}">${msg}</div>`;
-        }
     </script>
 </body>
 

@@ -25,6 +25,14 @@ def delete_user(values):
     cur.execute("DELETE FROM users WHERE user_id = %s", values)
     conn.commit()
 
+# checking user
+def check_user(email):
+    query="select * from users where email = %s"
+    cur.execute(query,(email,))
+    user=cur.fetchone()
+    return user
+
+
 # insert campaigns
 def insert_campaign(values):
     insert = "insert into campaigns(user_id, title, description, goal_amount, start_date, end_date, status, created_at) values(%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -134,6 +142,8 @@ def update_donation_items(values):
 def delete_donation_items(values):
     cur.execute("DELETE FROM donation_items WHERE item_id = %s", values)
     conn.commit()
+
+
 
 
 
