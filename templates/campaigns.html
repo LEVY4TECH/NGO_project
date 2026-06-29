@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %}
 {% block title %} Campaigns Page {% endblock%}
 
 {% block extra_css %}
@@ -6,4 +6,212 @@
 {% endblock %}
 
 
-{% block content %}{% endblock %}
+{% block content %}{% endblock %} -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaigns — HopeForward</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <style>
+        .campaign-card {
+            background: var(--navy-mid);
+            border: 1px solid rgba(201, 168, 76, 0.12);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            /* clips the header gradient to the card corners */
+            transition: all var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campaign-card:hover {
+            border-color: var(--gold-dim);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* Coloured top strip — background colour is set inline by JS per campaign */
+        .campaign-card-header {
+            background: linear-gradient(135deg, var(--navy-light), var(--teal));
+            /* fallback */
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* White body area below the header strip */
+        .campaign-card-body {
+            padding: 1.4rem 1.5rem;
+            flex: 1;
+            /* expands to fill remaining card height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campaign-card-body h5 {
+            margin-bottom: 0.5rem;
+        }
+
+        .campaign-card-body p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            flex: 1;
+            /* pushes the progress bar to the bottom */
+        }
+
+        /* Progress bar section — sits at the bottom of the card body */
+        .campaign-progress {
+            margin: 1rem 0 0.4rem;
+        }
+
+        /* Bootstrap .progress override — dark background track */
+        .campaign-progress .progress {
+            height: 8px;
+            background: var(--navy-light);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        /* The filled portion of the progress bar — gold gradient */
+        .campaign-progress .progress-bar {
+            background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+            border-radius: 50px;
+        }
+
+        /* Two small labels below the bar: "45% funded" on left, "Goal: $50,000" on right */
+        .campaign-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-hopeforward">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-hf" href="index.html">
+                <i class="fa-solid fa-heart-pulse me-2"></i>Hope<span>Forward</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="campaigns.html">Campaigns</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-1" id="navbar-auth"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header-banner">
+        <div class="container">
+            <span class="section-eyebrow">Active Fundraising</span>
+            <h1>Our Campaigns</h1>
+            <p>Every campaign is a call to action. Browse current initiatives and support the causes you believe in.</p>
+        </div>
+    </div>
+
+    <!-- Campaigns Grid -->
+    <section class="section-pad">
+        <div class="container">
+            <div class="row g-4" id="campaignsList">
+                <!-- Injected by JS -->
+            </div>
+            <div id="campaignsEmpty" style="display:none;" class="text-center py-5">
+                <div style="font-size:3rem;margin-bottom:1rem;color:var(--text-muted);">📣</div>
+                <h5>No Campaigns Yet</h5>
+                <p class="text-muted">Our team is preparing exciting campaigns. Check back soon!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-hf">
+        <div class="container">
+            <div class="footer-bottom">&copy; <span id="footerYear"></span> HopeForward Charity Foundation.</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/navbar.js"></script>
+    <script>
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+        const icons = ['fa-hand-holding-heart', 'fa-graduation-cap', 'fa-droplet', 'fa-seedling', 'fa-house-chimney', 'fa-stethoscope', 'fa-globe', 'fa-utensils'];
+        const colors = ['#1A6B5A', '#C9A84C', '#3B82F6', '#10B981', '#8B5CF6', '#EF4444', '#F59E0B', '#06B6D4'];
+
+        function render() {
+            const campaigns = HF.getCampaigns();
+            const list = document.getElementById('campaignsList');
+            const empty = document.getElementById('campaignsEmpty');
+
+            if (!campaigns.length) { empty.style.display = 'block'; return; }
+            empty.style.display = 'none';
+
+            list.innerHTML = campaigns.map((c, i) => {
+                const pct = c.goalAmount ? Math.min(100, Math.round((c.raised || 0) / c.goalAmount * 100)) : 0;
+                const icon = icons[i % icons.length];
+                const color = colors[i % colors.length];
+                return `
+        <div class="col-lg-4 col-md-6 reveal">
+          <div class="campaign-card">
+            <div class="campaign-card-header" style="background:linear-gradient(135deg,${color}33,${color}11);">
+              <div style="width:42px;height:42px;border-radius:10px;background:${color}33;display:flex;align-items:center;justify-content:center;color:${color};font-size:1.15rem;">
+                <i class="fa-solid ${icon}"></i>
+              </div>
+              <div>
+                <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:${color};font-weight:700;">By ${escHtml(c.adminEmail || 'Admin')}</div>
+                <div style="font-size:.7rem;color:var(--text-muted);">${c.startDate} → ${c.endDate}</div>
+              </div>
+            </div>
+            <div class="campaign-card-body">
+              <h5>${escHtml(c.title)}</h5>
+              <p>${escHtml(c.description)}</p>
+              <div class="campaign-progress">
+                <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+                <div class="campaign-meta">
+                  <span>${pct}% funded</span>
+                  <span>Goal: $${Number(c.goalAmount || 0).toLocaleString()}</span>
+                </div>
+              </div>
+              <button class="btn btn-gold w-100 mt-3 btn-sm">
+                <i class="fa-solid fa-heart me-1"></i>Support This Campaign
+              </button>
+            </div>
+          </div>
+        </div>`;
+            }).join('');
+        }
+
+        render();
+
+        function escHtml(s) {
+            return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+    </script>
+</body>
+
+</html>
