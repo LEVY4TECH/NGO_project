@@ -35,7 +35,7 @@ def check_user(email):
 
 # insert campaigns
 def insert_campaign(values):
-    insert = "insert into campaigns(user_id, title, description, goal_amount, start_date, end_date, status, created_at) values(%s, %s, %s, %s, %s, %s, %s, %s)"
+    insert = "insert into campaigns(user_id, title, description, goal_amount, start_date, end_date, status, created_at) values(%s, %s, %s, %s, %s, %s, %s, now())"
     cur.execute(insert, values)
     conn.commit()
 
@@ -57,15 +57,22 @@ def delete_campaigns(values):
 
 # insert blogs
 def insert_blogs(values):
-    insert = "insert into blogs(user_id, title, content, published_at) values(%s, %s, %s, %s)"
+    insert = "insert into blogs(user_id, title, content, published_at) values(%s, %s, %s, now())"
     cur.execute(insert, values)
     conn.commit()
 
 # fetch blogs
+# def fetch_blogs():
+#     cur.execute('select * from blogs;')
+#     blogs = cur.fetchall()
+#     return blogs
+
+# fetching blogs
 def fetch_blogs():
-    cur.execute('select * from blogs;')
+    cur.execute('SELECT blogs.blog_id, blogs.title, blogs.content, blogs.published_at, users.name, users.email FROM blogs JOIN users ON blogs.user_id = users.user_id ORDER BY blogs.published_at DESC;')
     blogs = cur.fetchall()
     return blogs
+    
 
 # update blogs
 def update_blogs(values):
@@ -101,7 +108,7 @@ def delete_donations(values):
 
 # insert events
 def insert_events(values):
-    insert = "insert into events(campaign_id, title, description, event_date, location, created_at) values(%s, %s, %s, %s, %s, %s)"
+    insert = "insert into events(campaign_id, title, description, event_date, location, created_at) values(%s, %s, %s, %s, %s, now())"
     cur.execute(insert, values)
     conn.commit()
 
@@ -142,6 +149,7 @@ def update_donation_items(values):
 def delete_donation_items(values):
     cur.execute("DELETE FROM donation_items WHERE item_id = %s", values)
     conn.commit()
+
 
 
 
