@@ -28,53 +28,57 @@ def blogs():
     blogs = fetch_blogs()
     return render_template('blogs.html', blogs = blogs)
 
-@app.route('/add_blogs', method = ['POST'])
+@app.route('/add_blogs', methods = ['GET','POST'])
 def add_blogs():
 
-    email = request.form['email']
-    name = request.form['name']
-    title = request.form['title']
-    content = request.form['content']
-    new_blog = (email, name, title, content)
-    insert_blogs(new_blog)
-    return redirect(url_for('blogs'))
+    if request.method == 'POST':
+        email = request.form['email']
+        name = request.form['name']
+        title = request.form['title']
+        content = request.form['content']
+        new_blog = (email, name, title, content)
+        insert_blogs(new_blog)
+        return redirect(url_for('blogs'))
 
 @app.route('/campaigns')
 def campaigns():
     campaigns = fetch_campaign()
     return render_template('campaigns.html', campaigns = campaigns)
 
-@app.route('/add_campaigns', method = ['POST'])
+@app.route('/add_campaigns', methods = ['GET','POST'])
 def add_campaigns():
 
-    email = request.form['email']
-    name = request.form['name']
-    title = request.form['title']
-    description = request.form['description']
-    goal_amount = request.form['amount']
-    start_date = request.form['start']
-    end_date = request.form['end']
-    new_campaign = (email, name, title, description, goal_amount, start_date, end_date)
-    insert_campaign(new_campaign)
-    return redirect(url_for('campaigns'))
+    if request.method == 'POST':
+        email = request.form['email']
+        name = request.form['name']
+        title = request.form['title']
+        description = request.form['description']
+        goal_amount = request.form['amount']
+        start_date = request.form['start']
+        end_date = request.form['end']
+        new_campaign = (email, name, title, description, goal_amount, start_date, end_date)
+        insert_campaign(new_campaign)
+        return redirect(url_for('campaigns'))
 
 @app.route('/events')
 def events():
     events = fetch_events()
     return render_template('events.html', events = events)
 
-@app.route('/add_events')
+@app.route('/add_events', methods = ['GET', 'POST'])
 def add_events():
 
-    email = request.form['email']
-    name = request.form['name']
-    title = request.form['title']
-    description = request.form['descriptiion']
-    event_date = request.form['date']
-    location = request.form['location']
-    new_event = (email, name, title, description, event_date, location)
-    insert_events(new_event)
-    return redirect(url_for('events'))
+    if request.method == 'POST':
+
+        email = request.form['email']
+        name = request.form['name']
+        title = request.form['title']
+        description = request.form['descriptiion']
+        event_date = request.form['date']
+        location = request.form['location']
+        new_event = (email, name, title, description, event_date, location)
+        insert_events(new_event)
+        return redirect(url_for('events'))
 
 # register route
 @app.route('/register', methods=['GET','POST'])
@@ -157,5 +161,5 @@ def admin_dashboard():
 
     return render_template('admin/index.html')
 
-
+app.run(debug=True)
     

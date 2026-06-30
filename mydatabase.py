@@ -1,6 +1,6 @@
 # database connection
 import psycopg2
-conn=psycopg2.connect(user='postgres',password='',host='localhost',port='5432',database='')
+conn=psycopg2.connect(user='postgres',password='leshan1234',host='localhost',port='5432',database='ngo')
 cur = conn.cursor()
 
 # inserting users
