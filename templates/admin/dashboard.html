@@ -1,0 +1,267 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Heading -->
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Dashboard</h2>
+
+        <p>
+            Welcome back,
+            <strong>{{ session['name'] }}</strong>.
+            Here's what's happening in HopeForward today.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ================= Statistics ================= -->
+
+<div class="dashboard-cards">
+
+    <a href="{{ url_for('manage_users') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h6>Registered Users</h6>
+
+            <h2>{{ total_users }}</h2>
+
+        </div>
+
+    </a>
+
+    <a href="{{ url_for('manage_volunteers') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-handshake-angle"></i>
+
+            <h6>Volunteer Applications</h6>
+
+            <h2>{{ total_volunteers }}</h2>
+
+        </div>
+
+    </a>
+
+    <a href="{{ url_for('manage_campaigns') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-bullhorn"></i>
+
+            <h6>Campaigns</h6>
+
+            <h2>{{ total_campaigns }}</h2>
+
+        </div>
+
+    </a>
+
+    <a href="{{ url_for('manage_blogs') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-newspaper"></i>
+
+            <h6>Blogs</h6>
+
+            <h2>{{ total_blogs }}</h2>
+
+        </div>
+
+    </a>
+
+    <a href="{{ url_for('manage_events') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <h6>Events</h6>
+
+            <h2>{{ total_events }}</h2>
+
+        </div>
+
+    </a>
+
+    <a href="{{ url_for('manage_donations') }}" class="text-decoration-none">
+
+        <div class="dashboard-card">
+
+            <i class="fa-solid fa-hand-holding-heart"></i>
+
+            <h6>Donations</h6>
+
+            <h2>{{ total_donations }}</h2>
+
+        </div>
+
+    </a>
+
+</div>
+
+<!-- ================= Quick Actions ================= -->
+
+<div class="admin-card">
+
+    <h4 class="mb-4">
+
+        <i class="fa-solid fa-bolt text-warning me-2"></i>
+
+        Quick Actions
+
+    </h4>
+
+    <div class="row g-3">
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('add_campaign') }}"
+               class="btn btn-primary w-100">
+
+                <i class="fa-solid fa-plus me-2"></i>
+
+                Add Campaign
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('add_event') }}"
+               class="btn btn-primary w-100">
+
+                <i class="fa-solid fa-calendar-plus me-2"></i>
+
+                Add Event
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('add_blog') }}"
+               class="btn btn-primary w-100">
+
+                <i class="fa-solid fa-pen me-2"></i>
+
+                Add Blog
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <a href="{{ url_for('manage_volunteers') }}"
+               class="btn btn-warning w-100">
+
+                <i class="fa-solid fa-user-check me-2"></i>
+
+                Review Volunteers
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= Recent Activity ================= -->
+
+<div class="admin-card">
+
+    <h4>
+
+        <i class="fa-solid fa-clock-rotate-left text-warning me-2"></i>
+
+        Recent Activity
+
+    </h4>
+
+    <table class="table table-striped table-hover">
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Activity</th>
+
+                <th>User</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>Today</td>
+
+                <td>Published a new blog</td>
+
+                <td>Levy Leshan</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Today</td>
+
+                <td>Created a new campaign</td>
+
+                <td>Admin</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Yesterday</td>
+
+                <td>Approved a volunteer</td>
+
+                <td>Admin</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Yesterday</td>
+
+                <td>Received a donation</td>
+
+                <td>System</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

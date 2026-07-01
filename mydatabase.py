@@ -15,6 +15,16 @@ def fetch_users():
     users = cur.fetchall()
     return users
 
+# fetching one user
+def fetch_user(user_id):
+
+    cur.execute(
+        "SELECT * FROM users WHERE user_id = %s;",
+        (user_id,)
+    )
+
+    return cur.fetchone()
+
 # update users
 def update_users(values):
     cur.execute("update users set name = %s, email = %s, password = %s, role = %s, status = %s", values)
@@ -149,6 +159,108 @@ def update_donation_items(values):
 def delete_donation_items(values):
     cur.execute("DELETE FROM donation_items WHERE item_id = %s", values)
     conn.commit()
+    
+# making admin
+def make_admin(user_id):
+
+    cur.execute(
+        """
+        UPDATE users
+        SET role='admin'
+        WHERE user_id=%s
+        """,
+        (user_id,)
+    )
+    
+# updating role
+def update_user_role(user_id):
+
+    update = """
+        UPDATE users
+        SET role = 'admin'
+        WHERE user_id = %s;
+    """
+
+    cur.execute(update, (user_id,))
+    conn.commit()
+
+    conn.commit()
+    
+# fetching volunteer
+def fetch_volunteers():
+
+    query = """
+        SELECT
+
+        volunteer_application.application_id,
+
+        users.name,
+
+        users.email,
+
+        volunteer_application.preferred_area,
+
+        volunteer_application.skills,
+
+        volunteer_application.availability,
+
+        volunteer_application.status
+
+        FROM volunteer_application
+
+        JOIN users
+
+        ON volunteer_application.user_id = users.user_id
+
+        ORDER BY volunteer_application.application_id DESC;
+    """
+
+    cur.execute(query)
+
+    volunteers = cur.fetchall()
+
+    return volunteers
+
+# approve volunteer
+def approve_volunteer(application_id):
+
+    query = """
+        UPDATE volunteer_application
+        SET status = 'approved'
+        WHERE application_id = %s;
+    """
+
+    cur.execute(query, (application_id,))
+
+    conn.commit()
+    
+# decline volunteer
+def decline_volunteer(application_id):
+
+    query = """
+        UPDATE volunteer_application
+        SET status = 'declined'
+        WHERE application_id = %s;
+    """
+
+    cur.execute(query, (application_id,))
+
+    conn.commit()
+    
+# fetch one volunteer
+def fetch_volunteer(application_id):
+
+    query = """
+        SELECT *
+        FROM volunteer_application
+        WHERE application_id = %s;
+    """
+
+    cur.execute(query, (application_id,))
+
+    volunteer = cur.fetchone()
+
+    return volunteer
 
 
 

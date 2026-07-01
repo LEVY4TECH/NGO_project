@@ -1,0 +1,285 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+Manage Volunteers
+{% endblock %}
+
+{% block page_title %}
+Manage Volunteers
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Volunteer Applications</h2>
+
+        <p>
+            Review volunteer applications and approve or decline applicants.
+        </p>
+
+    </div>
+
+    <div>
+
+        <span class="badge bg-primary fs-6">
+
+            Total Applications :
+            {{ volunteers|length }}
+
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <!-- Search -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-5">
+
+            <input
+                type="text"
+                id="searchInput"
+                class="form-control"
+                placeholder="Search by name or email">
+
+        </div>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="table-responsive">
+
+        <table
+            class="table table-striped table-hover align-middle"
+            id="volunteerTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Name</th>
+
+                    <th>Email</th>
+
+                    <th>Preferred Area</th>
+
+                    <th>Skills</th>
+
+                    <th>Availability</th>
+
+                    <th>Status</th>
+
+                    <th width="220">
+
+                        Action
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for volunteer in volunteers %}
+
+                <tr>
+
+                    <td>{{ volunteer[0] }}</td>
+
+                    <td>{{ volunteer[1] }}</td>
+
+                    <td>{{ volunteer[2] }}</td>
+
+                    <td>{{ volunteer[3] }}</td>
+
+                    <td>{{ volunteer[4] }}</td>
+
+                    <td>{{ volunteer[5] }}</td>
+
+                    <td>
+
+                        {% if volunteer[6] == 'approved' %}
+
+                            <span class="badge bg-success">
+
+                                Approved
+
+                            </span>
+
+                        {% elif volunteer[6] == 'declined' %}
+
+                            <span class="badge bg-danger">
+
+                                Declined
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if volunteer[6] == 'pending' %}
+
+                            <div class="d-flex gap-2">
+
+                                <form
+                                    action="{{ url_for('approve_volunteer_route', application_id=volunteer[0]) }}"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success btn-sm approve-btn">
+
+                                        <i class="fa-solid fa-check me-1"></i>
+
+                                        Approve
+
+                                    </button>
+
+                                </form>
+
+                                <form
+                                    action="{{ url_for('decline_volunteer_route', application_id=volunteer[0]) }}"
+                                    method="POST">
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm decline-btn">
+
+                                        <i class="fa-solid fa-xmark me-1"></i>
+
+                                        Decline
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% elif volunteer[6] == 'approved' %}
+
+                            <button
+                                class="btn btn-success btn-sm"
+                                disabled>
+
+                                <i class="fa-solid fa-check me-1"></i>
+
+                                Approved
+
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                disabled>
+
+                                <i class="fa-solid fa-xmark me-1"></i>
+
+                                Declined
+
+                            </button>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+// ================= Search =================
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("#volunteerTable tbody tr");
+
+    rows.forEach(function(row){
+
+        row.style.display = row.textContent.toLowerCase().includes(value)
+
+            ? ""
+
+            : "none";
+
+    });
+
+});
+
+
+// ================= Approve Confirmation =================
+
+document.querySelectorAll(".approve-btn").forEach(function(button){
+
+    button.addEventListener("click", function(e){
+
+        if(!confirm("Approve this volunteer application?")){
+
+            e.preventDefault();
+
+        }
+
+    });
+
+});
+
+
+// ================= Decline Confirmation =================
+
+document.querySelectorAll(".decline-btn").forEach(function(button){
+
+    button.addEventListener("click", function(e){
+
+        if(!confirm("Decline this volunteer application?")){
+
+            e.preventDefault();
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

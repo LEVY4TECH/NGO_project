@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,redirect,url_for,session,flash
 
-from mydatabase import insert_users, fetch_users, update_users, delete_user, insert_campaign, fetch_campaign, update_campaigns, delete_campaigns, insert_blogs, fetch_blogs, update_blogs, delete_blogs, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_events, fetch_events, update_events, delete_events, check_user
+from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, insert_campaign, fetch_campaign, update_campaigns, delete_campaigns, insert_blogs, fetch_blogs, update_blogs, delete_blogs, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_events, fetch_events, update_events, delete_events, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
 
 from flask_bcrypt import Bcrypt
 
@@ -21,6 +21,18 @@ def login_required(f):
         if 'email' not in session:
             return redirect(url_for('login'))
         return f(*args,**kwargs)
+    return protected
+
+def admin_required(f):
+    @wraps(f)
+    def protected(*args, **kwargs):
+
+        if 'role' not in session or session['role'] != 'admin':
+            flash("Access denied. Admins only.", "danger")
+            return redirect(url_for('home'))
+
+        return f(*args, **kwargs)
+
     return protected
 
 @app.route('/blogs')
@@ -160,6 +172,145 @@ def admin_dashboard():
         return redirect(url_for('home'))
 
     return render_template('admin/index.html')
+
+
+# admin users route
+@app.route('/admin/users')
+@login_required
+@admin_required
+def manage_users():
+
+    users = fetch_users()
+
+    return render_template(
+        'admin/users.html',
+        users=users
+    )
+    
+  
+# make admin route  
+@app.route('/admin/users/make_admin/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def make_admin(user_id):
+
+    user = fetch_user(user_id)
+
+    if not user:
+
+        flash("User not found.", "danger")
+        return redirect(url_for('manage_users'))
+
+    if user[4] == "admin":
+
+        flash("This user is already an administrator.", "warning")
+        return redirect(url_for('manage_users'))
+
+    update_user_role(user_id)
+
+    flash("User promoted to Admin successfully.", "success")
+
+    return redirect(url_for('manage_users'))
+
+
+# Dashboard Route
+@app.route('/admin/dashboard')
+@login_required
+@admin_required
+def admin_dashboard():
+
+    users = fetch_users()
+    campaigns = fetch_campaign()
+    blogs = fetch_blogs()
+    events = fetch_events()
+    donations = fetch_donations()
+
+    return render_template(
+        'admin/dashboard.html',
+
+        total_users=len(users),
+
+        total_volunteers=0,
+
+        total_campaigns=len(campaigns),
+
+        total_blogs=len(blogs),
+
+        total_events=len(events),
+
+        total_donations=len(donations)
+    )
+    
+# logout route
+@app.route('/logout')
+def logout():
+
+    session.clear()
+
+    flash("Logged out successfully.", "success")
+
+    return redirect(url_for('home'))
+
+# manage volunteers route
+@app.route('/admin/volunteers')
+@login_required
+@admin_required
+def manage_volunteers():
+
+    volunteers = fetch_volunteers()
+
+    return render_template(
+        'admin/volunteers.html',
+        volunteers=volunteers
+    )
+    
+# approve volunteer route
+@app.route('/admin/volunteers/approve/<int:application_id>', methods=['POST'])
+@login_required
+@admin_required
+def approve_volunteer_route(application_id):
+
+    volunteer = fetch_volunteer(application_id)
+
+    if not volunteer:
+
+        flash("Volunteer application not found.", "danger")
+        return redirect(url_for('manage_volunteers'))
+
+    if volunteer[5] == 'approved':
+
+        flash("This volunteer has already been approved.", "warning")
+        return redirect(url_for('manage_volunteers'))
+
+    approve_volunteer(application_id)
+
+    flash("Volunteer approved successfully.", "success")
+
+    return redirect(url_for('manage_volunteers'))
+
+# decline volunteer route
+@app.route('/admin/volunteers/decline/<int:application_id>', methods=['POST'])
+@login_required
+@admin_required
+def decline_volunteer_route(application_id):
+
+    volunteer = fetch_volunteer(application_id)
+
+    if not volunteer:
+
+        flash("Volunteer application not found.", "danger")
+        return redirect(url_for('manage_volunteers'))
+
+    if volunteer[5] == 'declined':
+
+        flash("This volunteer has already been declined.", "warning")
+        return redirect(url_for('manage_volunteers'))
+
+    decline_volunteer(application_id)
+
+    flash("Volunteer application declined.", "success")
+
+    return redirect(url_for('manage_volunteers'))
 
 app.run(debug=True)
     

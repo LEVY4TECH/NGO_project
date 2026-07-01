@@ -1,0 +1,953 @@
+/* ==========================================================
+                    HOPEFORWARD ADMIN CSS
+========================================================== */
+
+:root{
+
+    --navy:#102542;
+    --navy-light:#1c3d66;
+    --gold:#C9A84C;
+    --gold-light:#e0c46f;
+
+    --white:#ffffff;
+
+    --bg:#f5f7fb;
+
+    --text:#2d3748;
+
+    --muted:#6b7280;
+
+    --border:#e5e7eb;
+
+    --danger:#dc3545;
+
+    --success:#198754;
+
+    --radius:14px;
+
+    --transition:.3s ease;
+
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+body{
+
+    font-family:'Lato',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+}
+
+h1,h2,h3,h4,h5,h6{
+
+    font-family:'Playfair Display',serif;
+
+    margin:0;
+
+}
+
+a{
+
+    text-decoration:none;
+
+}
+
+/* ==========================================================
+                    WRAPPER
+========================================================== */
+
+.admin-wrapper{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/* ==========================================================
+                    SIDEBAR
+========================================================== */
+
+.sidebar{
+
+    width:280px;
+
+    background:var(--navy);
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    bottom:0;
+
+    overflow-y:auto;
+
+    transition:var(--transition);
+
+    z-index:1000;
+
+}
+
+.sidebar hr{
+
+    border-color:rgba(255,255,255,.08);
+
+    margin:1rem;
+
+}
+
+.sidebar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:25px;
+
+}
+
+.brand-icon{
+
+    width:55px;
+
+    height:55px;
+
+    background:var(--gold);
+
+    color:white;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+}
+
+.brand-text h4{
+
+    color:white;
+
+    margin-bottom:2px;
+
+}
+
+.brand-text span{
+
+    color:#d6d6d6;
+
+    font-size:.85rem;
+
+}
+
+/* ==========================================================
+                    SIDEBAR MENU
+========================================================== */
+
+.sidebar-menu{
+
+    list-style:none;
+
+    padding:0;
+
+    margin-top:10px;
+
+}
+
+.sidebar-menu li{
+
+    margin-bottom:6px;
+
+}
+
+.sidebar-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    color:#d9d9d9;
+
+    padding:14px 25px;
+
+    transition:var(--transition);
+
+    border-left:4px solid transparent;
+
+    font-weight:500;
+
+}
+
+.sidebar-menu a i{
+
+    width:20px;
+
+    text-align:center;
+
+}
+
+.sidebar-menu a:hover{
+
+    background:rgba(255,255,255,.05);
+
+    color:white;
+
+    border-left:4px solid var(--gold);
+
+}
+
+.sidebar-menu a.active{
+
+    background:rgba(201,168,76,.15);
+
+    border-left:4px solid var(--gold);
+
+    color:white;
+
+}
+
+/* ==========================================================
+                    LOGOUT
+========================================================== */
+
+.sidebar-bottom{
+
+    margin-top:auto;
+
+    padding:20px;
+
+}
+
+.sidebar-bottom a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    color:#f3f3f3;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    transition:var(--transition);
+
+}
+
+.sidebar-bottom a:hover{
+
+    background:rgba(220,53,69,.15);
+
+    color:#ffb4b4;
+
+}
+
+/* ==========================================================
+                    MAIN CONTENT
+========================================================== */
+
+.main-content{
+
+    margin-left:280px;
+
+    width:calc(100% - 280px);
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ==========================================================
+                    TOPBAR
+========================================================== */
+
+.topbar{
+
+    background:white;
+
+    padding:20px 35px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.05);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:999;
+
+}
+
+.topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.topbar h3{
+
+    color:var(--navy);
+
+}
+
+.topbar small{
+
+    color:var(--muted);
+
+}
+
+.menu-toggle{
+
+    display:none;
+
+    border:none;
+
+    background:none;
+
+    font-size:24px;
+
+    color:var(--navy);
+
+}
+
+.admin-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.profile-icon{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    background:var(--gold);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+}
+
+/* ==========================================================
+                    CONTENT
+========================================================== */
+
+.content-area{
+
+    padding:35px;
+
+}
+
+/* ==========================================================
+                    RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+.sidebar{
+
+    left:-280px;
+
+}
+
+.sidebar.show{
+
+    left:0;
+
+}
+
+.main-content{
+
+    margin-left:0;
+
+    width:100%;
+
+}
+
+.menu-toggle{
+
+    display:block;
+
+}
+
+.topbar{
+
+    padding:20px;
+
+}
+
+.content-area{
+
+    padding:20px;
+
+}
+
+}
+
+/* ==========================================================
+                    PAGE HEADER
+========================================================== */
+
+.page-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+.page-header h2{
+
+    color:var(--navy);
+
+    margin-bottom:5px;
+
+}
+
+.page-header p{
+
+    color:var(--muted);
+
+    margin:0;
+
+}
+
+/* ==========================================================
+                    DASHBOARD CARDS
+========================================================== */
+
+.dashboard-cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.dashboard-card{
+
+    background:white;
+
+    border-radius:var(--radius);
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+    border-left:5px solid var(--gold);
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.dashboard-card h6{
+
+    color:var(--muted);
+
+    margin-bottom:10px;
+
+    font-size:.95rem;
+
+}
+
+.dashboard-card h2{
+
+    color:var(--navy);
+
+    font-weight:700;
+
+}
+
+.dashboard-card i{
+
+    font-size:32px;
+
+    color:var(--gold);
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================================================
+                    CARD
+========================================================== */
+
+.admin-card{
+
+    background:white;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+    padding:25px;
+
+    margin-bottom:30px;
+
+}
+
+.admin-card h4{
+
+    color:var(--navy);
+
+    margin-bottom:20px;
+
+}
+
+/* ==========================================================
+                    TABLES
+========================================================== */
+
+.table{
+
+    margin-bottom:0;
+
+    vertical-align:middle;
+
+}
+
+.table thead{
+
+    background:var(--navy);
+
+    color:white;
+
+}
+
+.table thead th{
+
+    border:none;
+
+    padding:16px;
+
+    font-weight:600;
+
+}
+
+.table tbody td{
+
+    padding:16px;
+
+}
+
+.table-striped>tbody>tr:nth-of-type(odd){
+
+    background:#f8f9fb;
+
+}
+
+.table-hover tbody tr{
+
+    transition:var(--transition);
+
+}
+
+.table-hover tbody tr:hover{
+
+    background:#eef4ff;
+
+}
+
+/* ==========================================================
+                    BUTTONS
+========================================================== */
+
+.btn{
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    padding:10px 20px;
+
+    transition:var(--transition);
+
+}
+
+.btn-primary{
+
+    background:var(--navy);
+
+    border-color:var(--navy);
+
+}
+
+.btn-primary:hover{
+
+    background:var(--navy-light);
+
+    border-color:var(--navy-light);
+
+}
+
+.btn-warning{
+
+    background:var(--gold);
+
+    border-color:var(--gold);
+
+    color:white;
+
+}
+
+.btn-warning:hover{
+
+    background:#b69333;
+
+    border-color:#b69333;
+
+    color:white;
+
+}
+
+.btn-success{
+
+    color:white;
+
+}
+
+.btn-danger{
+
+    color:white;
+
+}
+
+.btn-outline-primary{
+
+    border-color:var(--navy);
+
+    color:var(--navy);
+
+}
+
+.btn-outline-primary:hover{
+
+    background:var(--navy);
+
+    color:white;
+
+}
+
+/* ==========================================================
+                    BADGES
+========================================================== */
+
+.badge{
+
+    padding:8px 12px;
+
+    font-size:.8rem;
+
+    border-radius:50px;
+
+}
+
+.badge-success{
+
+    background:rgba(25,135,84,.15);
+
+    color:var(--success);
+
+}
+
+.badge-warning{
+
+    background:rgba(255,193,7,.15);
+
+    color:#997404;
+
+}
+
+.badge-danger{
+
+    background:rgba(220,53,69,.15);
+
+    color:var(--danger);
+
+}
+
+/* ==========================================================
+                    FORMS
+========================================================== */
+
+.form-control,
+.form-select{
+
+    border-radius:10px;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color:var(--gold);
+
+    box-shadow:0 0 0 .2rem rgba(201,168,76,.2);
+
+}
+
+textarea.form-control{
+
+    resize:none;
+
+}
+
+/* ==========================================================
+                    SEARCH BAR
+========================================================== */
+
+.search-box{
+
+    position:relative;
+
+    max-width:350px;
+
+}
+
+.search-box input{
+
+    padding-left:42px;
+
+}
+
+.search-box i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:var(--muted);
+
+}
+
+/* ==========================================================
+                    ACTION BUTTONS
+========================================================== */
+
+.action-buttons{
+
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ==========================================================
+                    ALERTS
+========================================================== */
+
+.alert{
+
+    border:none;
+
+    border-radius:12px;
+
+}
+
+/* ==========================================================
+                    PAGINATION
+========================================================== */
+
+.pagination .page-link{
+
+    color:var(--navy);
+
+}
+
+.pagination .active .page-link{
+
+    background:var(--navy);
+
+    border-color:var(--navy);
+
+}
+
+/* ==========================================================
+                    FOOTER
+========================================================== */
+
+.admin-footer{
+
+    margin-top:auto;
+
+    padding:25px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:.9rem;
+
+}
+
+/* ==========================================================
+                    SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--gold);
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#ececec;
+
+}
+
+/* ==========================================================
+                    ANIMATIONS
+========================================================== */
+
+.dashboard-card,
+.admin-card{
+
+    animation:fadeIn .45s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(15px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+                    MOBILE
+========================================================== */
+
+@media(max-width:768px){
+
+.page-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.dashboard-cards{
+
+    grid-template-columns:1fr;
+
+}
+
+.admin-profile small{
+
+    display:none;
+
+}
+
+.table-responsive{
+
+    border-radius:var(--radius);
+
+}
+
+}

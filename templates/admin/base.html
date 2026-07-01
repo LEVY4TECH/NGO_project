@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        HopeForward Admin
+        {% endblock %}
+    </title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    {% block styles %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    <div class="admin-wrapper">
+
+        <!-- ================= Sidebar ================= -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="brand-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+
+                <div class="brand-text">
+                    <h4>HopeForward</h4>
+                    <span>Admin Portal</span>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <ul class="sidebar-menu">
+
+                <li>
+
+                    <a href="{{ url_for('admin_dashboard') }}"
+                        class="{% if request.endpoint=='admin_dashboard' %}active{% endif %}">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>Dashboard</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_users') }}"
+                        class="{% if request.endpoint=='manage_users' %}active{% endif %}">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <span>Users</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_volunteers') }}"
+                        class="{% if request.endpoint=='manage_volunteers' %}active{% endif %}">
+
+                        <i class="fa-solid fa-handshake-angle"></i>
+
+                        <span>Volunteers</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_campaigns') }}"
+                        class="{% if request.endpoint=='manage_campaigns' %}active{% endif %}">
+
+                        <i class="fa-solid fa-bullhorn"></i>
+
+                        <span>Campaigns</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_events') }}"
+                        class="{% if request.endpoint=='manage_events' %}active{% endif %}">
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                        <span>Events</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_blogs') }}"
+                        class="{% if request.endpoint=='manage_blogs' %}active{% endif %}">
+
+                        <i class="fa-solid fa-newspaper"></i>
+
+                        <span>Blogs</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="{{ url_for('manage_donations') }}"
+                        class="{% if request.endpoint=='manage_donations' %}active{% endif %}">
+
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+
+                        <span>Donations</span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+            <div class="sidebar-bottom">
+
+                <a href="{{ url_for('logout') }}">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>Logout</span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- =============== Main Area ================= -->
+
+        <main class="main-content">
+
+            <!-- Top Navbar -->
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button class="menu-toggle" id="menuToggle">
+
+                        <i class="fa-solid fa-bars"></i>
+
+                    </button>
+
+                    <div>
+
+                        <h3>
+                            {% block page_title %}
+                            Dashboard
+                            {% endblock %}
+                        </h3>
+
+                        <small>
+                            Welcome back,
+                            {{ session['name'] }}
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="admin-profile">
+
+                        <div class="profile-icon">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+
+                                {{ session['name'] }}
+
+                            </strong>
+
+                            <br>
+
+                            <small>
+
+                                {{ session['email'] }}
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- Main Page Content -->
+
+            <div class="content-area">
+
+                {% block content %}
+
+
+                {% endblock %}
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        const sidebar = document.getElementById("sidebar");
+        const menuToggle = document.getElementById("menuToggle");
+
+        menuToggle.addEventListener("click", () => {
+
+            sidebar.classList.toggle("show");
+
+        });
+
+        // Close sidebar when clicking outside (mobile)
+
+        document.addEventListener("click", function (e) {
+
+            if (window.innerWidth <= 992) {
+
+                if (
+                    !sidebar.contains(e.target) &&
+                    !menuToggle.contains(e.target)
+                ) {
+
+                    sidebar.classList.remove("show");
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>
