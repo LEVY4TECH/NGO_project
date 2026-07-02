@@ -1,0 +1,266 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+Manage Campaigns
+{% endblock %}
+
+{% block page_title %}
+Manage Campaigns
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Campaign Management</h2>
+
+        <p>
+            Create, edit and manage fundraising campaigns.
+        </p>
+
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <span class="badge bg-primary fs-6">
+
+            Total Campaigns :
+            {{ campaigns|length }}
+
+        </span>
+
+        <a href="{{ url_for('add_campaign') }}"
+           class="btn btn-success">
+
+            <i class="fa-solid fa-plus me-2"></i>
+
+            Add Campaign
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <!-- Search -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-5">
+
+            <input
+                type="text"
+                class="form-control"
+                id="searchInput"
+                placeholder="Search Campaign">
+
+        </div>
+
+    </div>
+
+    <!-- Campaign Table -->
+
+    <div class="table-responsive">
+
+        <table
+            class="table table-striped table-hover align-middle"
+            id="campaignTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Title</th>
+
+                    <th>Description</th>
+
+                    <th>Goal</th>
+
+                    <th>Start</th>
+
+                    <th>End</th>
+
+                    <th>Status</th>
+
+                    <th>Created By</th>
+
+                    <th width="180">
+
+                        Action
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for campaign in campaigns %}
+
+                <tr>
+
+                    <td>{{ campaign[0] }}</td>
+
+                    <td>{{ campaign[1] }}</td>
+
+                    <td>
+
+                        {{ campaign[2][:60] }}
+
+                        {% if campaign[2]|length > 60 %}
+                            ...
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        KSh {{ "{:,.0f}".format(campaign[3]) }}
+
+                    </td>
+
+                    <td>
+
+                        {{ campaign[4] }}
+
+                    </td>
+
+                    <td>
+
+                        {{ campaign[5] }}
+
+                    </td>
+
+                    <td>
+
+                        {% if campaign[6] == 'verified' %}
+
+                            <span class="badge bg-success">
+
+                                Verified
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ campaign[8] }}
+
+                    </td>
+
+                    <td>
+
+                        <div class="d-flex gap-2">
+
+                            <a
+                                href="{{ url_for('edit_campaign', campaign_id=campaign[0]) }}"
+                                class="btn btn-primary btn-sm">
+
+                                <i class="fa-solid fa-pen-to-square"></i>
+
+                            </a>
+
+                            <form
+                                action="{{ url_for('remove_campaign', campaign_id=campaign[0]) }}"
+                                method="POST">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger btn-sm delete-btn">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+
+/* ================= Search ================= */
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("keyup", function(){
+
+    const value = this.value.toLowerCase();
+
+    const rows = document.querySelectorAll("#campaignTable tbody tr");
+
+    rows.forEach(function(row){
+
+        row.style.display = row.textContent.toLowerCase().includes(value)
+
+            ? ""
+
+            : "none";
+
+    });
+
+});
+
+
+/* ================= Delete Confirmation ================= */
+
+document.querySelectorAll(".delete-btn").forEach(function(button){
+
+    button.addEventListener("click", function(e){
+
+        const proceed = confirm(
+
+"Delete this campaign?\n\nThis action cannot be undone."
+
+        );
+
+        if(!proceed){
+
+            e.preventDefault();
+
+        }
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

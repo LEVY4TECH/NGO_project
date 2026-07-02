@@ -1,0 +1,218 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+Edit Campaign
+{% endblock %}
+
+{% block page_title %}
+Edit Campaign
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Edit Campaign</h2>
+
+        <p>
+            Update campaign information.
+        </p>
+
+    </div>
+
+    <div>
+
+        <a href="{{ url_for('manage_campaigns') }}"
+           class="btn btn-secondary">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <form method="POST">
+
+        <div class="row">
+
+            <!-- Campaign Title -->
+
+            <div class="col-md-12 mb-3">
+
+                <label class="form-label">
+
+                    Campaign Title
+
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    value="{{ campaign[1] }}"
+                    required>
+
+            </div>
+
+            <!-- Description -->
+
+            <div class="col-md-12 mb-3">
+
+                <label class="form-label">
+
+                    Description
+
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="7"
+                    class="form-control"
+                    required>{{ campaign[2] }}</textarea>
+
+            </div>
+
+            <!-- Goal Amount -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Goal Amount (KSh)
+
+                </label>
+
+                <input
+                    type="number"
+                    min="1"
+                    step="0.01"
+                    name="goal_amount"
+                    class="form-control"
+                    value="{{ campaign[3] }}"
+                    required>
+
+            </div>
+
+            <!-- Start Date -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Start Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="start_date"
+                    class="form-control"
+                    value="{{ campaign[4] }}"
+                    required>
+
+            </div>
+
+            <!-- End Date -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    End Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="end_date"
+                    class="form-control"
+                    value="{{ campaign[5] }}"
+                    required>
+
+            </div>
+
+            <!-- Status -->
+
+            <div class="col-md-6 mb-4">
+
+                <label class="form-label">
+
+                    Status
+
+                </label>
+
+                <select
+                    name="status"
+                    class="form-select"
+                    required>
+
+                    <option value="pending"
+                        {% if campaign[6] == 'pending' %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="verified"
+                        {% if campaign[6] == 'verified' %}selected{% endif %}>
+                        Verified
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-end gap-2">
+
+            <a href="{{ url_for('manage_campaigns') }}"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                Update Campaign
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+const startDate = document.querySelector('input[name="start_date"]');
+const endDate = document.querySelector('input[name="end_date"]');
+
+startDate.addEventListener("change", function(){
+
+    endDate.min = this.value;
+
+});
+
+</script>
+
+{% endblock %}

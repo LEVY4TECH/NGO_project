@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,redirect,url_for,session,flash
 
-from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, insert_campaign, fetch_campaign, update_campaigns, delete_campaigns, insert_blogs, fetch_blogs, update_blogs, delete_blogs, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_events, fetch_events, update_events, delete_events, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
+from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, insert_campaign, fetch_campaign, update_campaign, delete_campaign, fetch_single_campaign,insert_blog, fetch_blogs, fetch_single_blog, update_blog, delete_blog, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_event, fetch_events, fetch_single_event, fetch_campaign_dropdown, update_event, delete_event, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
 
 from flask_bcrypt import Bcrypt
 
@@ -40,17 +40,109 @@ def blogs():
     blogs = fetch_blogs()
     return render_template('blogs.html', blogs = blogs)
 
-@app.route('/add_blogs', methods = ['GET','POST'])
-def add_blogs():
+# admin blog route
+@app.route('/admin/blogs')
+@login_required
+@admin_required
+def manage_blogs():
 
-    if request.method == 'POST':
-        email = request.form['email']
-        name = request.form['name']
+    blogs = fetch_blogs()
+
+    return render_template(
+        'admin/blogs.html',
+        blogs=blogs
+    )
+
+@app.route('/admin/blogs/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_blog():
+
+    if request.method == "POST":
+
+        user_id = session['user_id']
+
         title = request.form['title']
+
         content = request.form['content']
-        new_blog = (email, name, title, content)
-        insert_blogs(new_blog)
-        return redirect(url_for('blogs'))
+
+        values = (
+            user_id,
+            title,
+            content
+        )
+
+        insert_blog(values)
+
+        flash("Blog published successfully.", "success")
+
+        return redirect(url_for('manage_blogs'))
+
+    return render_template(
+        'admin/add_blog.html'
+    )
+    
+# admin editing blog route
+@app.route('/admin/blogs/edit/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_blog(blog_id):
+
+    blog = fetch_single_blog(blog_id)
+
+    if not blog:
+
+        flash("Blog not found.", "danger")
+
+        return redirect(url_for('manage_blogs'))
+
+    if request.method == "POST":
+
+        title = request.form['title']
+
+        content = request.form['content']
+
+        values = (
+
+            title,
+
+            content,
+
+            blog_id
+
+        )
+
+        update_blog(values)
+
+        flash("Blog updated successfully.", "success")
+
+        return redirect(url_for('manage_blogs'))
+
+    return render_template(
+        'admin/edit_blog.html',
+        blog=blog
+    )
+    
+
+# admin deleting blog
+@app.route('/admin/blogs/delete/<int:blog_id>', methods=['POST'])
+@login_required
+@admin_required
+def remove_blog(blog_id):
+
+    blog = fetch_single_blog(blog_id)
+
+    if not blog:
+
+        flash("Blog not found.", "danger")
+
+        return redirect(url_for('manage_blogs'))
+
+    delete_blog(blog_id)
+
+    flash("Blog deleted successfully.", "success")
+
+    return redirect(url_for('manage_blogs'))
 
 @app.route('/campaigns')
 def campaigns():
@@ -77,29 +169,130 @@ def events():
     events = fetch_events()
     return render_template('events.html', events = events)
 
-@app.route('/add_events', methods = ['GET', 'POST'])
-def add_events():
+# admin events route
+@app.route('/admin/events')
+@login_required
+@admin_required
+def manage_events():
+
+    events = fetch_events()
+
+    return render_template(
+        'admin/events.html',
+        events=events
+    )
+
+# admin adding event route
+@app.route('/admin/events/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_event():
+
+    campaigns = fetch_campaign_dropdown()
 
     if request.method == 'POST':
 
-        email = request.form['email']
-        name = request.form['name']
+        campaign_id = request.form['campaign_id']
         title = request.form['title']
-        description = request.form['descriptiion']
-        event_date = request.form['date']
+        description = request.form['description']
+        event_date = request.form['event_date']
         location = request.form['location']
-        new_event = (email, name, title, description, event_date, location)
-        insert_events(new_event)
-        return redirect(url_for('events'))
+
+        values = (
+            campaign_id,
+            title,
+            description,
+            event_date,
+            location
+        )
+
+        insert_event(values)
+
+        flash("Event added successfully.", "success")
+
+        return redirect(url_for('manage_events'))
+
+    return render_template(
+        'admin/add_event.html',
+        campaigns=campaigns
+    )
+    
+
+# admin editing event route
+@app.route('/admin/events/edit/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_event(event_id):
+
+    event = fetch_single_event(event_id)
+
+    if not event:
+
+        flash("Event not found.", "danger")
+
+        return redirect(url_for('manage_events'))
+
+    campaigns = fetch_campaign_dropdown()
+
+    if request.method == 'POST':
+
+        campaign_id = request.form['campaign_id']
+        title = request.form['title']
+        description = request.form['description']
+        event_date = request.form['event_date']
+        location = request.form['location']
+
+        values = (
+            campaign_id,
+            title,
+            description,
+            event_date,
+            location,
+            event_id
+        )
+
+        update_event(values)
+
+        flash("Event updated successfully.", "success")
+
+        return redirect(url_for('manage_events'))
+
+    return render_template(
+        'admin/edit_event.html',
+        event=event,
+        campaigns=campaigns
+    )
+    
+
+# admin deleting event route
+@app.route('/admin/events/delete/<int:event_id>', methods=['POST'])
+@login_required
+@admin_required
+def remove_event(event_id):
+
+    event = fetch_single_event(event_id)
+
+    if not event:
+
+        flash("Event not found.", "danger")
+
+        return redirect(url_for('manage_events'))
+
+    delete_event(event_id)
+
+    flash("Event deleted successfully.", "success")
+
+    return redirect(url_for('manage_events'))
 
 # register route
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method=='POST':
-        
-        fullname=request.form['name']
-        email=request.form['email']
-        password=request.form['password']
+
+    if request.method == 'POST':
+
+        fullname = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
         confirm_password = request.form['cpassword']
 
         # Check if passwords match
@@ -107,18 +300,32 @@ def register():
             flash("Passwords do not match.", "danger")
             return redirect(url_for('register'))
 
-        hashed_password=bcrypt.generate_password_hash(password).decode('utf-8')
+        # Check if email already exists
+        user = check_user(email)
 
-        # checking if user exists
-        user=check_user(email)
+        if user:
+            flash("An account with this email already exists.", "danger")
+            return redirect(url_for('register'))
 
-        if not user:
-            new_user=(fullname,email,hashed_password)
-            insert_users(new_user)
-            flash("You're Registered Successfully.", "success")
-            return redirect(url_for('login'))
-        else:
-            print('Already Registered')
+        # Hash password
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        # Every new user is registered as a normal user
+        role = "user"
+
+        new_user = (
+            fullname,
+            email,
+            hashed_password,
+            role
+        )
+
+        insert_users(new_user)
+
+        flash("Registration successful. You can now log in.", "success")
+
+        return redirect(url_for('login'))
+
     return render_template('register.html')
 
 
@@ -159,19 +366,7 @@ def login():
 
     return render_template('login.html')
 
-# admin route
-@app.route('/admin')
-def admin_dashboard():
 
-    if 'user_id' not in session:
-        flash("Please log in first.", "danger")
-        return redirect(url_for('login'))
-
-    if session['role'] != 'admin':
-        flash("You are not authorized to access this page.", "danger")
-        return redirect(url_for('home'))
-
-    return render_template('admin/index.html')
 
 
 # admin users route
@@ -213,13 +408,14 @@ def make_admin(user_id):
     return redirect(url_for('manage_users'))
 
 
-# Dashboard Route
+#  admin Dashboard Route
 @app.route('/admin/dashboard')
 @login_required
 @admin_required
 def admin_dashboard():
 
     users = fetch_users()
+    volunteers = fetch_volunteers()
     campaigns = fetch_campaign()
     blogs = fetch_blogs()
     events = fetch_events()
@@ -230,7 +426,7 @@ def admin_dashboard():
 
         total_users=len(users),
 
-        total_volunteers=0,
+        total_volunteers=len(volunteers),
 
         total_campaigns=len(campaigns),
 
@@ -311,6 +507,116 @@ def decline_volunteer_route(application_id):
     flash("Volunteer application declined.", "success")
 
     return redirect(url_for('manage_volunteers'))
+
+# admin campaign route
+@app.route('/admin/campaigns')
+@login_required
+@admin_required
+def manage_campaigns():
+
+    campaigns = fetch_campaign()
+
+    return render_template(
+        'admin/campaigns.html',
+        campaigns=campaigns
+    )
+    
+# add campaign route
+@app.route('/admin/campaigns/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_campaign():
+
+    if request.method == "POST":
+
+        user_id = session['user_id']
+        title = request.form['title']
+        description = request.form['description']
+        goal_amount = request.form['goal_amount']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+
+        # Automatically assign the status
+        status = "verified"
+
+        campaign = (
+            user_id,
+            title,
+            description,
+            goal_amount,
+            start_date,
+            end_date,
+            status
+        )
+
+        insert_campaign(campaign)
+
+        flash("Campaign added successfully.", "success")
+
+        return redirect(url_for('manage_campaigns'))
+
+    return render_template("admin/add_campaign.html")
+
+# edit campaign route
+@app.route('/admin/campaigns/edit/<int:campaign_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_campaign(campaign_id):
+
+    campaign = fetch_single_campaign(campaign_id)
+
+    if not campaign:
+
+        flash("Campaign not found.", "danger")
+
+        return redirect(url_for('manage_campaigns'))
+
+    if request.method == "POST":
+
+        title = request.form['title']
+        description = request.form['description']
+        goal_amount = request.form['goal_amount']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+
+        # Admin can change the status here
+        status = request.form['status']
+
+        values = (
+            title,
+            description,
+            goal_amount,
+            start_date,
+            end_date,
+            status,
+            campaign_id
+    )
+
+    update_campaign(values)
+
+    flash("Campaign updated successfully.", "success")
+
+    return redirect(url_for('manage_campaigns'))
+    
+# Delete campaign route
+@app.route('/admin/campaigns/delete/<int:campaign_id>', methods=['POST'])
+@login_required
+@admin_required
+def remove_campaign(campaign_id):
+
+    campaign = fetch_single_campaign(campaign_id)
+
+    if not campaign:
+
+        flash("Campaign not found.", "danger")
+
+        return redirect(url_for('manage_campaigns'))
+
+    delete_campaign(campaign_id)
+
+    flash("Campaign deleted successfully.", "success")
+
+    return redirect(url_for('manage_campaigns'))
 
 app.run(debug=True)
     

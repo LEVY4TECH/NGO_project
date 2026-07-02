@@ -5,8 +5,19 @@ cur = conn.cursor()
 
 # inserting users
 def insert_users(values):
-    insert = "insert into users(name, email, password, role, status) values(%s, %s, %s, %s, %s)"
-    cur.execute(insert, values)
+
+    query = """
+        INSERT INTO users(
+            name,
+            email,
+            password,
+            role
+        )
+        VALUES(%s,%s,%s,%s);
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
 # fetching users
@@ -45,53 +56,240 @@ def check_user(email):
 
 # insert campaigns
 def insert_campaign(values):
-    insert = "insert into campaigns(user_id, title, description, goal_amount, start_date, end_date, status, created_at) values(%s, %s, %s, %s, %s, %s, %s, now())"
-    cur.execute(insert, values)
+
+    query = """
+        INSERT INTO campaigns(
+
+            user_id,
+
+            title,
+
+            description,
+
+            goal_amount,
+
+            start_date,
+
+            end_date,
+
+            status
+
+        )
+
+        VALUES(%s,%s,%s,%s,%s,%s,%s);
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
 # fetch campaigns
 def fetch_campaign():
-    cur.execute('select * from campaigns;')
+
+    query = """
+        SELECT
+
+        campaigns.campaign_id,
+
+        campaigns.title,
+
+        campaigns.description,
+
+        campaigns.goal_amount,
+
+        campaigns.start_date,
+
+        campaigns.end_date,
+
+        campaigns.status,
+
+        campaigns.created_at,
+
+        users.name,
+
+        users.email
+
+        FROM campaigns
+
+        JOIN users
+
+        ON campaigns.user_id = users.user_id
+
+        ORDER BY campaigns.created_at DESC;
+    """
+
+    cur.execute(query)
+
     campaigns = cur.fetchall()
+
     return campaigns
 
+# fetch one campaign
+def fetch_single_campaign(campaign_id):
+
+    query = """
+        SELECT *
+
+        FROM campaigns
+
+        WHERE campaign_id = %s;
+    """
+
+    cur.execute(query, (campaign_id,))
+
+    campaign = cur.fetchone()
+
+    return campaign
+
 # update campaigns
-def update_campaigns(values):
-    cur.execute("update campaigns set user_id = %s, title = %s, description = %s, goal_amount = %s, start_date = %s, end_date = %s, status = %s, created_at = %s", values)
+def update_campaign(values):
+
+    query = """
+        UPDATE campaigns
+
+        SET
+
+        title=%s,
+
+        description=%s,
+
+        goal_amount=%s,
+
+        start_date=%s,
+
+        end_date=%s,
+
+        status=%s
+
+        WHERE campaign_id=%s;
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
 # delete campaigns
-def delete_campaigns(values):
-    cur.execute("DELETE FROM campaigns WHERE campaign_id = %s", values)
+def delete_campaign(campaign_id):
+
+    query = """
+        DELETE FROM campaigns
+
+        WHERE campaign_id=%s;
+    """
+
+    cur.execute(query, (campaign_id,))
+
     conn.commit()
 
 # insert blogs
-def insert_blogs(values):
-    insert = "insert into blogs(user_id, title, content, published_at) values(%s, %s, %s, now())"
-    cur.execute(insert, values)
+def insert_blog(values):
+
+    query = """
+
+        INSERT INTO blogs(
+
+            user_id,
+
+            title,
+
+            content
+
+        )
+
+        VALUES(%s,%s,%s);
+
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
-# fetch blogs
-# def fetch_blogs():
-#     cur.execute('select * from blogs;')
-#     blogs = cur.fetchall()
-#     return blogs
 
-# fetching blogs
+# fetching all blogs
 def fetch_blogs():
-    cur.execute('SELECT blogs.blog_id, blogs.title, blogs.content, blogs.published_at, users.name, users.email FROM blogs JOIN users ON blogs.user_id = users.user_id ORDER BY blogs.published_at DESC;')
-    blogs = cur.fetchall()
-    return blogs
+
+    query = """
+        SELECT
+
+        blogs.blog_id,
+
+        blogs.title,
+
+        blogs.content,
+
+        blogs.published_at,
+
+        users.name,
+
+        users.email
+
+        FROM blogs
+
+        JOIN users
+
+        ON blogs.user_id = users.user_id
+
+        ORDER BY blogs.published_at DESC;
+    """
+
+    cur.execute(query)
+
+    return cur.fetchall()
+
+# fetch one blog
+def fetch_single_blog(blog_id):
+
+    query = """
+
+        SELECT *
+
+        FROM blogs
+
+        WHERE blog_id=%s;
+
+    """
+
+    cur.execute(query, (blog_id,))
+
+    return cur.fetchone()
     
 
 # update blogs
-def update_blogs(values):
-    cur.execute("update blogs set user_id = %s, title = %s, content = %s, published_at = %s", values)
+def update_blog(values):
+
+    query = """
+
+        UPDATE blogs
+
+        SET
+
+        title=%s,
+
+        content=%s
+
+        WHERE blog_id=%s;
+
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
 # delete blogs
-def delete_blogs(values):
-    cur.execute("DELETE FROM blogs WHERE blog_id = %s", values)
+def delete_blog(blog_id):
+
+    query = """
+
+        DELETE
+
+        FROM blogs
+
+        WHERE blog_id=%s;
+
+    """
+
+    cur.execute(query, (blog_id,))
+
     conn.commit()
 
 # insert donations
@@ -117,25 +315,144 @@ def delete_donations(values):
     conn.commit()
 
 # insert events
-def insert_events(values):
-    insert = "insert into events(campaign_id, title, description, event_date, location, created_at) values(%s, %s, %s, %s, %s, now())"
-    cur.execute(insert, values)
+def insert_event(values):
+
+    query = """
+
+        INSERT INTO events(
+
+            campaign_id,
+
+            title,
+
+            description,
+
+            event_date,
+
+            location
+
+        )
+
+        VALUES(%s,%s,%s,%s,%s);
+
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
-# fetch events
+# fetch all events
 def fetch_events():
-    cur.execute("select * from events;")
+
+    query = """
+
+        SELECT
+
+        events.event_id,
+
+        campaigns.title,
+
+        events.title,
+
+        events.description,
+
+        events.event_date,
+
+        events.location,
+
+        events.created_at
+
+        FROM events
+
+        JOIN campaigns
+
+        ON events.campaign_id = campaigns.campaign_id
+
+        ORDER BY events.event_date DESC;
+
+    """
+
+    cur.execute(query)
+
     events = cur.fetchall()
+
     return events
 
+# fetch campaigns dropdown to be used in the admin events page
+def fetch_campaign_dropdown():
+
+    query = """
+        SELECT campaign_id, title
+        FROM campaigns
+        WHERE status = 'verified'
+        ORDER BY title;
+    """
+
+    cur.execute(query)
+
+    campaigns = cur.fetchall()
+
+    return campaigns
+
+# fetch one event
+def fetch_single_event(event_id):
+
+    query = """
+
+        SELECT *
+
+        FROM events
+
+        WHERE event_id=%s;
+
+    """
+
+    cur.execute(query, (event_id,))
+
+    return cur.fetchone()
+
 # update events
-def update_events(values):
-    cur.execute("update events set campaign_id = %s, title = %s, description = %s, event_date = %s, location = %s, created_at = %s", values)
+def update_event(values):
+
+    query = """
+
+        UPDATE events
+
+        SET
+
+        campaign_id=%s,
+
+        title=%s,
+
+        description=%s,
+
+        event_date=%s,
+
+        location=%s
+
+        WHERE event_id=%s;
+
+    """
+
+    cur.execute(query, values)
+
     conn.commit()
 
 # delete_events
-def delete_events(values):
-    cur.execute("DELETE FROM events WHERE event_id = %s", values)
+def delete_event(event_id):
+
+    query = """
+
+        DELETE
+
+        FROM events
+
+        WHERE event_id=%s;
+
+    """
+
+    cur.execute(query, (event_id,))
+
     conn.commit()
 
 # insert donation_items

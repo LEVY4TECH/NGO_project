@@ -1,0 +1,188 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+Add Campaign
+{% endblock %}
+
+{% block page_title %}
+Add Campaign
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Add New Campaign</h2>
+
+        <p>
+            Create a new fundraising campaign.
+        </p>
+
+    </div>
+
+    <div>
+
+        <a href="{{ url_for('manage_campaigns') }}"
+           class="btn btn-secondary">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <form method="POST">
+
+        <div class="row">
+
+            <!-- Campaign Title -->
+
+            <div class="col-md-12 mb-3">
+
+                <label class="form-label">
+
+                    Campaign Title
+
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    class="form-control"
+                    placeholder="Enter campaign title"
+                    required>
+
+            </div>
+
+            <!-- Description -->
+
+            <div class="col-md-12 mb-3">
+
+                <label class="form-label">
+
+                    Description
+
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="7"
+                    class="form-control"
+                    placeholder="Write campaign description..."
+                    required></textarea>
+
+            </div>
+
+            <!-- Goal -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Goal Amount (KSh)
+
+                </label>
+
+                <input
+                    type="number"
+                    min="1"
+                    step="0.01"
+                    name="goal_amount"
+                    class="form-control"
+                    placeholder="500000"
+                    required>
+
+            </div>
+
+            <!-- Start Date -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+
+                    Start Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="start_date"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <!-- End Date -->
+
+            <div class="col-md-6 mb-4">
+
+                <label class="form-label">
+
+                    End Date
+
+                </label>
+
+                <input
+                    type="date"
+                    name="end_date"
+                    class="form-control"
+                    required>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="d-flex justify-content-end gap-2">
+
+            <a href="{{ url_for('manage_campaigns') }}"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                Publish Campaign
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+const startDate = document.querySelector('input[name="start_date"]');
+const endDate = document.querySelector('input[name="end_date"]');
+
+startDate.addEventListener("change", function(){
+
+    endDate.min = this.value;
+
+});
+
+</script>
+
+{% endblock %}
