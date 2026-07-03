@@ -1,0 +1,197 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+Campaigns | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            Our Campaigns
+
+        </h1>
+
+        <p>
+
+            Support meaningful initiatives that are transforming
+            lives across communities. Every contribution makes
+            a lasting difference.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- CAMPAIGNS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span>
+
+                Active Campaigns
+
+            </span>
+
+            <h2>
+
+                Make An Impact Today
+
+            </h2>
+
+            <p>
+
+                Browse our ongoing fundraising campaigns and
+                discover how you can help create positive change.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- Search -->
+
+        <div class="row justify-content-center mb-5">
+
+            <div class="col-lg-6">
+
+                <input type="text" class="form-control form-control-lg campaign-search"
+                    placeholder="Search campaigns...">
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row g-4">
+
+            {% if campaigns %}
+
+            {% for campaign in campaigns %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="campaign-card">
+
+                    <h4>
+
+                        {{ campaign[1] }}
+
+                    </h4>
+
+                    <p>
+
+                        {{ campaign[2][:170] }}
+
+                        {% if campaign[2]|length > 170 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+
+
+                    <div class="campaign-meta">
+
+                        <span>
+
+                            Goal
+
+                        </span>
+
+                        <strong>
+
+                            KSh {{ "{:,.0f}".format(campaign[3]) }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="progress mb-3">
+
+                        <div class="progress-bar" style="width:35%;">
+
+                        </div>
+
+                    </div>
+
+                    <div class="campaign-progress">
+
+                        <span>
+
+                            35% Funded
+
+                        </span>
+
+                        <span>
+
+                            Ends {{ campaign[5].strftime('%d %b %Y') }}
+
+                        </span>
+
+                    </div>
+
+
+
+                    <a href="{{ url_for('campaign_details', campaign_id=campaign[0]) }}"
+                        class="btn-hf btn-hf-primary w-100 mt-4">
+
+                        View Campaign
+
+                    </a>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+
+            <div class="col-12 text-center">
+
+                <h4>
+
+                    No Campaigns Available
+
+                </h4>
+
+                <p>
+
+                    Check back later for upcoming fundraising campaigns.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

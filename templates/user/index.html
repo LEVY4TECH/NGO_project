@@ -1,0 +1,416 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+Home | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- HERO CAROUSEL -->
+<!-- ========================================= -->
+
+<section>
+
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active">
+            </button>
+
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1">
+            </button>
+
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2">
+            </button>
+
+        </div>
+
+        <div class="carousel-inner">
+
+            <!-- ================================= -->
+
+            <div class="carousel-item active">
+
+                <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1600&q=80"
+                    class="d-block w-100 hero-image" alt="Education">
+
+                <div class="carousel-caption">
+
+                    <span class="hero-badge">
+
+                        Welcome To HopeForward
+
+                    </span>
+
+                    <h1>
+
+                        Together We Can Change
+                        Lives Forever
+
+                    </h1>
+
+                    <p>
+
+                        Every donation, every volunteer,
+                        and every campaign brings hope to
+                        someone who needs it most.
+
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="{{ url_for('campaigns') }}" class="btn-hf btn-hf-primary">
+
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+
+                            Donate Now
+
+                        </a>
+
+                        <a href="{{ url_for('about') }}" class="btn-hf btn-hf-outline">
+
+                            Learn More
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================================= -->
+
+            <div class="carousel-item">
+
+                <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=1600&q=80"
+                    class="d-block w-100 hero-image" alt="Healthcare">
+
+                <div class="carousel-caption">
+
+                    <span class="hero-badge">
+
+                        Healthcare Outreach
+
+                    </span>
+
+                    <h1>
+
+                        Every Family Deserves
+                        Quality Healthcare
+
+                    </h1>
+
+                    <p>
+
+                        We organize medical camps,
+                        health education and community
+                        outreach programs across Kenya.
+
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="{{ url_for('events') }}" class="btn-hf btn-hf-primary">
+
+                            Upcoming Events
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================================= -->
+
+            <div class="carousel-item">
+
+                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=80"
+                    class="d-block w-100 hero-image" alt="Volunteer">
+
+                <div class="carousel-caption">
+
+                    <span class="hero-badge">
+
+                        Become A Volunteer
+
+                    </span>
+
+                    <h1>
+
+                        Small Acts Of Kindness
+                        Create Big Impact
+
+                    </h1>
+
+                    <p>
+
+                        Join our growing family of
+                        volunteers and help transform
+                        communities one step at a time.
+
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="#" class="btn-hf btn-hf-primary">
+
+                            Become A Volunteer
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" data-bs-target="#heroCarousel" data-bs-slide="prev">
+
+            <span class="carousel-control-prev-icon"></span>
+
+        </button>
+
+        <button class="carousel-control-next" data-bs-target="#heroCarousel" data-bs-slide="next">
+
+            <span class="carousel-control-next-icon"></span>
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- WHO WE ARE -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span>
+
+                Who We Are
+
+            </span>
+
+            <h2>
+
+                Creating Hope, One Life at a Time
+
+            </h2>
+
+            <p>
+
+                HopeForward is a charitable organization dedicated to improving
+                lives through education, healthcare, community development,
+                emergency relief, and sustainable empowerment programs across
+                Kenya.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4">
+
+            <!-- Card 1 -->
+
+            <div class="col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-heart"></i>
+
+                    </div>
+
+                    <h4>
+
+                        Compassion
+
+                    </h4>
+
+                    <p>
+
+                        We believe every person deserves dignity,
+                        kindness and an opportunity to live a better
+                        life regardless of their circumstances.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Card 2 -->
+
+            <div class="col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                    </div>
+
+                    <h4>
+
+                        Education
+
+                    </h4>
+
+                    <p>
+
+                        Supporting education through scholarships,
+                        school supplies, mentorship programs and
+                        community learning initiatives.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Card 3 -->
+
+            <div class="col-lg-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+
+                        <i class="fa-solid fa-earth-africa"></i>
+
+                    </div>
+
+                    <h4>
+
+                        Sustainable Impact
+
+                    </h4>
+
+                    <p>
+
+                        We invest in long-term solutions that empower
+                        families and communities to become
+                        self-sufficient.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- IMPACT STATISTICS -->
+<!-- ========================================= -->
+
+<section class="impact-section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span>
+
+                Our Impact
+
+            </span>
+
+            <h2>
+
+                Making A Difference Every Day
+
+            </h2>
+
+            <p>
+
+                Every campaign, every donation, and every volunteer contributes
+                to transforming lives and building stronger communities.
+
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="impact-card">
+
+                    <h2>2,450+</h2>
+
+                    <p>Families Supported</p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="impact-card">
+
+                    <h2>12,000+</h2>
+
+                    <p>Lives Impacted</p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="impact-card">
+
+                    <h2>320+</h2>
+
+                    <p>Students Sponsored</p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="impact-card">
+
+                    <h2>KSh 8.5M</h2>
+
+                    <p>Raised Through Donations</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

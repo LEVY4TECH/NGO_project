@@ -1,0 +1,100 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+{{ blog[1] }} | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            {{ blog[1] }}
+
+        </h1>
+
+        <p>
+
+            HopeForward Blog
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- BLOG DETAILS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="campaign-details">
+
+            <div class="campaign-info">
+
+                <div>
+
+                    <small>Published</small>
+
+                    <h4>
+
+                        {{ blog[3].strftime('%d %b %Y') }}
+
+                    </h4>
+
+                </div>
+
+                <div>
+
+                    <small>Author</small>
+
+                    <h4>
+
+                        {{ blog[4] }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+            <h3>
+
+                Article
+
+            </h3>
+
+            <p style="white-space: pre-line;">
+
+                {{ blog[2] }}
+
+            </p>
+
+            <a href="{{ url_for('blogs') }}"
+               class="btn-hf btn-hf-outline btn-hf-lg mt-4">
+
+                Back to Blogs
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

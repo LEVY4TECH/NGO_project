@@ -1,0 +1,110 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+{{ event[2] }}
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            {{ event[2] }}
+
+        </h1>
+
+        <p>
+
+            Join us and make a difference in our community.
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- EVENT DETAILS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="campaign-details">
+
+            <div class="campaign-info">
+
+                <div>
+
+                    <small>Event Date</small>
+
+                    <h4>
+
+                        {{ event[4].strftime('%d %b %Y') }}
+
+                    </h4>
+
+                </div>
+
+                <div>
+
+                    <small>Location</small>
+
+                    <h4>
+
+                        {{ event[5] }}
+
+                    </h4>
+
+                </div>
+
+                <div>
+
+                    <small>Campaign ID</small>
+
+                    <h4>
+
+                        #{{ event[1] }}
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+            <h3>
+
+                About This Event
+
+            </h3>
+
+            <p>
+
+                {{ event[3] }}
+
+            </p>
+
+            <a href="{{ url_for('volunteer') }}"
+               class="btn-hf btn-hf-primary btn-hf-lg mt-4">
+
+                Register as a Volunteer
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

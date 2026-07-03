@@ -1,0 +1,159 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+Blogs | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            Our Blog
+
+        </h1>
+
+        <p>
+
+            Stay informed with our latest stories, community updates,
+            project highlights and insights from HopeForward.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- BLOGS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span>
+
+                Latest Articles
+
+            </span>
+
+            <h2>
+
+                Stories That Inspire
+
+            </h2>
+
+            <p>
+
+                Explore updates from our team, success stories,
+                community initiatives and the impact of your support.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4">
+
+            {% if blogs %}
+
+            {% for blog in blogs %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="blog-card">
+
+                    <div class="blog-top">
+
+                        <span>
+
+                            {{ blog[3].strftime('%d %b %Y') }}
+
+                        </span>
+
+                        <span>
+
+                            {{ blog[4] }}
+
+                        </span>
+
+                    </div>
+
+
+
+                    <h4>
+
+                        {{ blog[1] }}
+
+                    </h4>
+
+
+
+                    <p>
+
+                        {{ blog[2][:180] }}
+
+                        {% if blog[2]|length > 180 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+
+
+                    <a href="{{ url_for('blog_details', blog_id=blog[0]) }}" class="btn-hf btn-hf-outline mt-auto">
+
+                        Read More
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+
+            <div class="col-12 text-center">
+
+                <h4>
+
+                    No Blogs Available
+
+                </h4>
+
+                <p>
+
+                    New stories and updates will appear here soon.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

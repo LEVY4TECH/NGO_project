@@ -1,63 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "user/base.html" %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register — HopeForward</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;500;600;700&display=swap"
-        rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <style>
-        .auth-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
-            padding: 2rem 1rem;
-            /* side padding on small screens */
-        }
+{% block title %}
 
-        /* The form card itself */
-        .auth-card {
-            background: var(--navy-mid);
-            border: 1px solid rgba(201, 168, 76, 0.2);
-            border-radius: var(--radius-lg);
-            padding: 2.5rem 2.2rem;
-            width: 100%;
-            max-width: 460px;
-            /* never wider than 460px */
-            box-shadow: var(--shadow);
-        }
+Register | HopeForward
 
-        /* Brand name link at the top of each auth card */
-        .auth-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: var(--gold);
-            margin-bottom: 0.3rem;
-        }
+{% endblock %}
 
-        /* Main heading — "Create an Account" / "Welcome Back" */
-        .auth-card h2 {
-            font-size: 1.6rem;
-            margin-bottom: 0.3rem;
-        }
+{% block content %}
 
-        /* Supporting subtitle under the heading */
-        .auth-card .auth-sub {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.8rem;
-        }
-    </style>
-</head>
 
-<body class="auth-page">
+<section class="auth-page">
 
     <div class="auth-card">
         <!-- Brand -->
@@ -158,6 +110,6 @@
 
 
     </script>
-</body>
+</section>
 
-</html>
+{% endblock%}

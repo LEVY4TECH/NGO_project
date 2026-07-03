@@ -1,0 +1,155 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+Events | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            Upcoming Events
+
+        </h1>
+
+        <p>
+
+            Join our community events, outreach programs and
+            fundraising activities as we work together to create
+            lasting change.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- EVENTS -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <span>
+
+                Community Events
+
+            </span>
+
+            <h2>
+
+                Be Part Of The Change
+
+            </h2>
+
+            <p>
+
+                Discover upcoming activities where you can
+                volunteer, learn, connect and make a positive
+                impact within the community.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="row g-4">
+
+            {% if events %}
+
+            {% for event in events %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="event-card">
+
+                    <div class="event-date">
+
+                        {{ event[4].strftime('%d %b %Y') }}
+
+                    </div>
+
+                    <h4>
+
+                        {{ event[2] }}
+
+                    </h4>
+
+                    <p>
+
+                        {{ event[3][:170] }}
+
+                        {% if event[3]|length > 170 %}
+
+                        ...
+
+                        {% endif %}
+
+                    </p>
+
+                    <div class="event-location">
+
+                        <strong>Location:</strong>
+
+                        {{ event[5] }}
+
+                    </div>
+
+                    <a href="{{ url_for('event_details', event_id=event[0]) }}"
+                        class="btn-hf btn-hf-primary w-100 mt-4">
+
+                        View Event
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+
+            <div class="col-12 text-center">
+
+                <h4>
+
+                    No Upcoming Events
+
+                </h4>
+
+                <p>
+
+                    There are currently no scheduled events.
+                    Please check back soon.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

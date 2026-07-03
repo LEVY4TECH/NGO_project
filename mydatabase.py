@@ -4,19 +4,15 @@ conn=psycopg2.connect(user='postgres',password='leshan1234',host='localhost',por
 cur = conn.cursor()
 
 # inserting users
+# inserting users
 def insert_users(values):
 
-    query = """
-        INSERT INTO users(
-            name,
-            email,
-            password,
-            role
-        )
-        VALUES(%s,%s,%s,%s);
+    insert = """
+        INSERT INTO users(name, email, password, role)
+        VALUES (%s, %s, %s, %s);
     """
 
-    cur.execute(query, values)
+    cur.execute(insert, values)
 
     conn.commit()
 
@@ -52,6 +48,18 @@ def check_user(email):
     cur.execute(query,(email,))
     user=cur.fetchone()
     return user
+
+
+# count all users so as to make the first regiistered user an admin
+def count_users():
+
+    query = "SELECT COUNT(*) FROM users;"
+
+    cur.execute(query)
+
+    total_users = cur.fetchone()[0]
+
+    return total_users
 
 
 # insert campaigns

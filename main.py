@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request,redirect,url_for,session,flash
 
-from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, insert_campaign, fetch_campaign, update_campaign, delete_campaign, fetch_single_campaign,insert_blog, fetch_blogs, fetch_single_blog, update_blog, delete_blog, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_event, fetch_events, fetch_single_event, fetch_campaign_dropdown, update_event, delete_event, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
+from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, count_users,insert_campaign, fetch_campaign, update_campaign, delete_campaign, fetch_single_campaign,insert_blog, fetch_blogs, fetch_single_blog, update_blog, delete_blog, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_event, fetch_events, fetch_single_event, fetch_campaign_dropdown, update_event, delete_event, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
+
+from datetime import datetime
 
 from flask_bcrypt import Bcrypt
 
@@ -13,7 +15,7 @@ bcrypt=Bcrypt(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('/user/index.html')
 
 def login_required(f):
     @wraps(f)
@@ -38,7 +40,27 @@ def admin_required(f):
 @app.route('/blogs')
 def blogs():
     blogs = fetch_blogs()
-    return render_template('blogs.html', blogs = blogs)
+    return render_template('/user/blogs.html', blogs = blogs)
+
+# viewing one blog in users page
+@app.route('/user/blog/<int:blog_id>')
+def blog_details(blog_id):
+
+    blog = fetch_single_blog(blog_id)
+
+    if not blog:
+
+        flash("Blog not found.", "danger")
+
+        return redirect(url_for('blogs'))
+
+    return render_template(
+
+        'user/blog_details.html',
+
+        blog=blog
+
+    )
 
 # admin blog route
 @app.route('/admin/blogs')
@@ -147,27 +169,31 @@ def remove_blog(blog_id):
 @app.route('/campaigns')
 def campaigns():
     campaigns = fetch_campaign()
-    return render_template('campaigns.html', campaigns = campaigns)
+    return render_template('/user/campaigns.html', campaigns = campaigns)
 
-@app.route('/add_campaigns', methods = ['GET','POST'])
-def add_campaigns():
 
-    if request.method == 'POST':
-        email = request.form['email']
-        name = request.form['name']
-        title = request.form['title']
-        description = request.form['description']
-        goal_amount = request.form['amount']
-        start_date = request.form['start']
-        end_date = request.form['end']
-        new_campaign = (email, name, title, description, goal_amount, start_date, end_date)
-        insert_campaign(new_campaign)
-        return redirect(url_for('campaigns'))
 
 @app.route('/events')
 def events():
     events = fetch_events()
-    return render_template('events.html', events = events)
+    return render_template('/user/events.html', events = events)
+
+# viewing one event in the users page
+@app.route('/event/<int:event_id>')
+def event_details(event_id):
+
+    event = fetch_single_event(event_id)
+
+    if not event:
+
+        flash("Event not found.", "danger")
+
+        return redirect(url_for('events'))
+
+    return render_template(
+        'user/event_details.html',
+        event=event
+    )
 
 # admin events route
 @app.route('/admin/events')
@@ -310,8 +336,13 @@ def register():
         # Hash password
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        # Every new user is registered as a normal user
-        role = "user"
+        # Make the first registered user an admin
+        total_users = count_users()
+
+        if total_users == 0:
+            role = "admin"
+        else:
+            role = "user"
 
         new_user = (
             fullname,
@@ -521,6 +552,23 @@ def manage_campaigns():
         campaigns=campaigns
     )
     
+# user campaign route(view one campaign)
+@app.route('/campaign/<int:campaign_id>')
+def campaign_details(campaign_id):
+
+    campaign = fetch_single_campaign(campaign_id)
+
+    if not campaign:
+
+        flash("Campaign not found.", "danger")
+
+        return redirect(url_for('campaigns'))
+
+    return render_template(
+        'user/campaign_details.html',
+        campaign=campaign
+    )
+    
 # add campaign route
 @app.route('/admin/campaigns/add', methods=['GET', 'POST'])
 @login_required
@@ -617,6 +665,32 @@ def remove_campaign(campaign_id):
     flash("Campaign deleted successfully.", "success")
 
     return redirect(url_for('manage_campaigns'))
+
+# automatically generate the current year in the footer
+@app.context_processor
+def inject_current_year():
+    return {
+        "current_year": datetime.now().year
+    }
+    
+# about route
+@app.route('/about')
+def about():
+
+    return render_template('user/about.html')
+
+
+# contact route
+@app.route('/contact')
+def contact():
+
+    return render_template('user/contact.html')
+
+# Admin managing donations route
+@app.route('/manage_donations')
+def manage_donations():
+
+    return render_template('admin/donation.html')
 
 app.run(debug=True)
     
