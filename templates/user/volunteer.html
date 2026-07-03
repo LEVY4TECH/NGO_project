@@ -1,0 +1,236 @@
+{% extends "user/base.html" %}
+
+{% block title %}
+
+Become a Volunteer | HopeForward
+
+{% endblock %}
+
+{% block content %}
+
+<!-- ========================================= -->
+<!-- PAGE BANNER -->
+<!-- ========================================= -->
+
+<section class="page-banner">
+
+    <div class="container">
+
+        <h1>
+
+            Become a Volunteer
+
+        </h1>
+
+        <p>
+
+            Join our team of passionate volunteers and help us create
+            lasting change in our communities.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ========================================= -->
+<!-- VOLUNTEER FORM -->
+<!-- ========================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="card shadow-lg border-0">
+
+                    <div class="card-body p-5">
+
+                        <div class="text-center mb-5">
+
+                            <h2>
+
+                                Volunteer Application
+
+                            </h2>
+
+                            <p class="text-muted">
+
+                                Complete the form below and we'll review
+                                your application as soon as possible.
+
+                            </p>
+
+                        </div>
+
+                        <form method="POST">
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+
+                                    Preferred Area
+
+                                </label>
+
+                                <select
+                                    name="preferred_area"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="">
+
+                                        Select an Area
+
+                                    </option>
+
+                                    <option>
+
+                                        Community Outreach
+
+                                    </option>
+
+                                    <option>
+
+                                        Event Support
+
+                                    </option>
+
+                                    <option>
+
+                                        Fundraising
+
+                                    </option>
+
+                                    <option>
+
+                                        Education
+
+                                    </option>
+
+                                    <option>
+
+                                        Healthcare
+
+                                    </option>
+
+                                    <option>
+
+                                        Environmental Conservation
+
+                                    </option>
+
+                                    <option>
+
+                                        Administration
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+
+                                    Skills
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="skills"
+                                    class="form-control"
+                                    placeholder="e.g. Graphic Design, Teaching, Driving"
+                                    required>
+
+                            </div>
+
+
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+
+                                    Availability
+
+                                </label>
+
+                                <select
+                                    name="availability"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="">
+
+                                        Select Availability
+
+                                    </option>
+
+                                    <option>
+
+                                        Weekdays
+
+                                    </option>
+
+                                    <option>
+
+                                        Weekends
+
+                                    </option>
+
+                                    <option>
+
+                                        Evenings
+
+                                    </option>
+
+                                    <option>
+
+                                        Full Time
+
+                                    </option>
+
+                                    <option>
+
+                                        Part Time
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+
+                            <button
+                                type="submit"
+                                class="btn-hf btn-hf-primary w-100">
+
+                                Submit Application
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

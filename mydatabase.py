@@ -511,6 +511,29 @@ def update_user_role(user_id):
 
     conn.commit()
     
+# inserting volunteer
+def insert_volunteer(values):
+
+    query = """
+        INSERT INTO volunteer_application(
+
+            user_id,
+
+            preferred_area,
+
+            skills,
+
+            availability
+
+        )
+
+        VALUES(%s,%s,%s,%s);
+    """
+
+    cur.execute(query, values)
+
+    conn.commit()
+    
 # fetching volunteer
 def fetch_volunteers():
 

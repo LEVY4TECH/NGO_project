@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,redirect,url_for,session,flash
 
-from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, count_users,insert_campaign, fetch_campaign, update_campaign, delete_campaign, fetch_single_campaign,insert_blog, fetch_blogs, fetch_single_blog, update_blog, delete_blog, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_event, fetch_events, fetch_single_event, fetch_campaign_dropdown, update_event, delete_event, check_user, update_user_role, fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
+from mydatabase import insert_users, fetch_users, fetch_user,update_users, delete_user, count_users,insert_campaign, fetch_campaign, update_campaign, delete_campaign, fetch_single_campaign,insert_blog, fetch_blogs, fetch_single_blog, update_blog, delete_blog, insert_donation_items, fetch_donation_items, update_donation_items, delete_donation_items, insert_donations, fetch_donations, update_donations, delete_donations, insert_event, fetch_events, fetch_single_event, fetch_campaign_dropdown, update_event, delete_event, check_user, update_user_role, insert_volunteer,fetch_volunteer, fetch_volunteers, approve_volunteer, decline_volunteer
 
 from datetime import datetime
 
@@ -357,7 +357,7 @@ def register():
 
         return redirect(url_for('login'))
 
-    return render_template('register.html')
+    return render_template('user/register.html')
 
 
 # login route
@@ -395,7 +395,7 @@ def login():
 
         return redirect(url_for('home'))
 
-    return render_template('login.html')
+    return render_template('user/login.html')
 
 
 
@@ -691,6 +691,49 @@ def contact():
 def manage_donations():
 
     return render_template('admin/donation.html')
+
+# volunteer route
+@app.route('/volunteer', methods=['GET', 'POST'])
+@login_required
+def volunteer():
+
+    if request.method == "POST":
+
+        user_id = session['user_id']
+
+        preferred_area = request.form['preferred_area']
+        skills = request.form['skills']
+        availability = request.form['availability']
+
+        volunteer = (
+            user_id,
+            preferred_area,
+            skills,
+            availability
+        )
+
+        insert_volunteer(volunteer)
+
+        flash(
+            "Your volunteer application has been submitted successfully. We will review it soon.",
+            "success"
+        )
+
+        return redirect(url_for('home'))
+
+    return render_template('user/volunteer.html')
+
+# no dupicate volunteer applications
+# application = check_volunteer_application(user_id)
+
+# if application:
+
+#     flash(
+#         "You have already submitted a volunteer application.",
+#         "warning"
+#     )
+
+#     return redirect(url_for('home'))
 
 app.run(debug=True)
     
